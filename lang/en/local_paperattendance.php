@@ -186,6 +186,13 @@ $string['takeattendance'] = "Take Attendance";
 $string['notallowedtakeattendance'] = "Not allowed to take attendances";
 $string['nostudentsenrolled'] = "There are no students enrolled in the course.";
 $string['tokennotaccepted'] = "Token not accepted";
+$string['attendancetitle'] = "Digital Attendance";
+$string['extrasession'] = "An <strong>extra session</strong> will be created that does not belong to the course.";
+$string['attendancealreadytaken'] = "Assistance has already been taken in the current module.";
+$string['waitnextmodule'] = "To be able to take assistance you must wait for the <strong>next module</strong> to start.";
+$string['attendancesaved'] = "Attendance saved correctly.";
+$string['alertinfodigitalattendance'] = "<strong>Attention!</strong> You can not take the attendance for the current module after it has finished.";
+
 
 //messages
 $string['dear'] = "Dear Teacher";
@@ -248,6 +255,8 @@ $string['formscannerfolderlocation']="Formscanner - Folder location";
 $string['formscannerfolderlocationtext']="Address of the location of the folder containing the images to be processed. Example: /xxx/xxx/";
 $string['categoryid']="Category Id";
 $string['categoryidtext']="Pregrado's category value: 1 for Webcursos-d / 406 for Webcursos Production";
+$string['minutesdelay']="Minutes of digital delay";
+$string['minutesdelaytext']="Maximum of extra minutes to be able to take digital assistance after completing the module. (0 - 19)";
 
 // Task
 $string['taskprocesspdf']="Process PDFs";

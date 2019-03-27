@@ -51,6 +51,10 @@ $PAGE->set_pagelayout("standard");
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin ( 'ui' );
 $PAGE->requires->jquery_plugin ( 'ui-css' );
+
+$PAGE->requires->js( new moodle_url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js') );
+$PAGE->requires->css( new moodle_url('https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css') );
+
 $contextsystem = context_system::instance();
 //Page pagination
 $page = optional_param('page', 0, PARAM_INT);
@@ -162,7 +166,7 @@ if( $isteacher || is_siteadmin($USER) || has_capability('local/paperattendance:p
                     $synchronizedicon = new pix_icon("i/checkpermissions", get_string('synchronized', 'local_paperattendance'));
                 }
                 else{
-                    $synchronizedicon = new pix_icon("i/scheduled", get_string('unsynchronized', 'local_paperattendance'));
+                    $synchronizedicon = new pix_icon(" i/duration", get_string('unsynchronized', 'local_paperattendance'));
                 }
                 $synchronizediconaction = $OUTPUT->action_icon(
                     $urlomegasync,
@@ -190,7 +194,7 @@ if( $isteacher || is_siteadmin($USER) || has_capability('local/paperattendance:p
                         $statusicon
                         );
                     // Define edition icon and url
-                    $editactionasistencia = html_writer::div($msgstatus, "presencehover ", array("style"=>"display:none; cursor:pointer; text-decoration: underline; color: blue;", "presenceid"=>"$attendance->idp", "setstudentpresence"=>"$setstudentpresence"));
+                    $editactionasistencia = html_writer::div($msgstatus, "presencehover ", array("style"=>"display:yes; cursor:pointer; text-decoration: underline; color: blue;", "presenceid"=>"$attendance->idp", "setstudentpresence"=>"$setstudentpresence"));
                     // 				$editurlattendance = new moodle_url("/local/paperattendance/history.php", array(
                     // 						"action" => "edit",
                     // 						"presenceid" => $attendance->idp,
@@ -590,7 +594,7 @@ if( $isteacher || is_siteadmin($USER) || has_capability('local/paperattendance:p
                     "courseid" => $courseid,
                     "type" => $attendance->type
                 ));
-                $studentsattendanceicon_attendance = new pix_icon("e/fullpage", get_string('seestudents', 'local_paperattendance'));
+                $studentsattendanceicon_attendance = new pix_icon("i/log", get_string('seestudents', 'local_paperattendance'));
                 $studentsattendanceaction_attendance = $OUTPUT->action_icon(
                     $studentsattendanceurl_attendance,
                     $studentsattendanceicon_attendance
@@ -602,10 +606,10 @@ if( $isteacher || is_siteadmin($USER) || has_capability('local/paperattendance:p
                 //Define synchronized or unsynchronized url
                 $urlomegasync = new moodle_url("#");
                 if ( $attendancestatus == 2){
-                    $synchronizedicon = new pix_icon("t/go", get_string('synchronized', 'local_paperattendance'));
+                    $synchronizedicon = new pix_icon("i/checked", get_string('synchronized', 'local_paperattendance'));
                 }
                 else{
-                    $synchronizedicon = new pix_icon("i/scheduled", get_string('unsynchronized', 'local_paperattendance'));
+                    $synchronizedicon = new pix_icon(" i/duration", get_string('unsynchronized', 'local_paperattendance'));
                 }
                 $synchronizediconaction = $OUTPUT->action_icon(
                     $urlomegasync,
@@ -792,7 +796,7 @@ else if ($isstudent) {
     if ($action == "view"){
         //icons
         $urlicon = new moodle_url("#");
-        $synchronizedicon = new pix_icon("i/scheduled", get_string('pending', 'local_paperattendance'));
+        $synchronizedicon = new pix_icon(" i/duration", get_string('pending', 'local_paperattendance'));
         $synchronizediconaction = $OUTPUT->action_icon(
             $urlicon,
             $synchronizedicon
@@ -983,12 +987,12 @@ echo $OUTPUT->footer();
 <script>
 $( document ).ready(function() {
 	
-	$('.generaltable').find('tr').hover(function() {
-			$( this ).find('.presencehover').toggle();
-		}, function() {
-			$( this ).find('.presencehover').toggle();
-		}
-	);
+	//$('.generaltable').find('tr').hover(function() {
+		//	$( this ).find('.presencehover').toggle();
+		//}, function() {
+			//$( this ).find('.presencehover').toggle();
+		//}
+	//);
 	$('.generaltable').find('th').hover(function() {
 			$( this ).find('.changeall').toggle();
 		}, function() {
@@ -1004,12 +1008,12 @@ $( document ).ready(function() {
 		if(studentpresence == 0){
 			var settext = "Presente";
 			var setpresence = 1;
-			var icon = moodleurl+"/local/paperattendance/img/invalid.svg";
+			var icon = 'icon fa fa-remove text-danger fa-fw';
 		}
 		else{
 			var settext = "Ausente";
 			var setpresence = 0;
-			var icon = moodleurl+"/local/paperattendance/img/valid.svg";
+			var icon = 'icon fa fa-check text-success fa-fw ';
 		}
 		$.ajax({
 		    type: 'GET',
@@ -1022,8 +1026,8 @@ $( document ).ready(function() {
 		    success: function (response) {
 				div.html(settext);
 				div.attr("setstudentpresence", setpresence);
-				div.parent().parent().find('.smallicon').first().attr({
-					  src: icon
+				div.parent().parent().find('.icon').first().attr({
+					  'class': icon
 				});
 		    }
 		});
@@ -1066,18 +1070,18 @@ $( document ).ready(function() {
 			    //now that we save the students attendance, we need to actualize the setpresence: 0 ->when was changed to present and 1->when changed to absent
 		    	setpresence = response["setpresence"];
 		    	var moodleurl = "<?php echo $CFG->wwwroot;?>";
-				
+				//we use font awesome icons
 				if(setpresence == 1){
 					var settext = "Presente";
 					var settextchangeall = "Cambiar Todos";
 					var setpresencestudent = 1;
-					var icon = moodleurl+"/local/paperattendance/img/invalid.svg";
+					var icon = 'icon fa fa-remove text-danger fa-fw';
 				}
 				else{
 					var settext = "Ausente";
 					var settextchangeall = "Cambiar Todos";
 					var setpresencestudent = 0;
-					var icon = moodleurl+"/local/paperattendance/img/valid.svg";
+					var icon = 'icon fa fa-check text-success fa-fw ';
 				}
 				//now we find every student in the table and change his frontend to present or absent
 				var trow = $('.generaltable').find('tr').find('.presencehover');
@@ -1085,8 +1089,8 @@ $( document ).ready(function() {
 					var div = $(this); 
 					div.html(settext);
 					div.attr("setstudentpresence", setpresencestudent);
-					div.parent().parent().find('.smallicon').first().attr({
-						  src: icon
+					div.parent().parent().find('.icon').first().attr({
+						'class': icon
 					});
 					
 				});

@@ -186,7 +186,12 @@ $string['takeattendance'] = "Pasar Asistencia";
 $string['notallowedtakeattendance'] = "No tienes permisos para pasar asistencia";
 $string['nostudentsenrolled'] = "No existen alumnos matriculados en el curso.";
 $string['tokennotaccepted'] = "Token no aceptado";
-
+$string['attendancetitle'] = "Asistencia Digital";
+$string['extrasession'] = "Se creará una <strong>sesión extra</strong> que no pertenece al horario del curso.";
+$string['attendancealreadytaken'] = "Ya se ha tomado asistencia en el modulo actual.";
+$string['waitnextmodule'] = "Para poder tomar asistencia debe esperar a que comience el <strong>módulo siguiente</strong>.";
+$string['attendancesaved'] = "Asistencia guardada correctamente.";
+$string['alertinfodigitalattendance'] = "<strong>¡Atención!</strong> No podrá pasar asistencia para el módulo actual después que este haya finalizado.";
 
 
 //messages
@@ -250,6 +255,8 @@ $string['formscannerfolderlocation']="Formscanner - Ubicación de la carpeta";
 $string['formscannerfolderlocationtext']="Dirección de la ubicación de la carpeta que contiene las imágenes a procesar. Ejemplo: /xxx/xxx/";
 $string['categoryid']="Id de Catergoría";
 $string['categoryidtext']="Valor categoría de pregrado: 1 para Webcursos-d / 406 para Webcursos Producción";
+$string['minutesdelay']="Minutos de retraso digital";
+$string['minutesdelaytext']="Máximo de minutos extras para poder tomar asistencia digital luego de terminar el módulo. (0 - 19)";
 
 // Task
 $string['taskprocesspdf']="Procesar PDFs";

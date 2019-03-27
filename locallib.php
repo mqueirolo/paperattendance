@@ -1699,13 +1699,12 @@ function paperattendance_read_csv($file, $path, $pdffilename, $uploaderobj){
 	$return = 0;
 	
 	$errorpage = null;
-	
 	if (($handle = fopen($file, "r")) !== FALSE) {
 		while(! feof($handle))
   		{
 			$data = fgetcsv($handle, 1000, ";");
 			$numero = count($data);
-			//mtrace( $numero." datoss en la línea ".$fila);
+			mtrace( $numero." datoss en la línea ".$fila);
 			print_r($data);
 			$stop = true;
 			
@@ -2007,7 +2006,6 @@ function paperattendance_runcsvproccessing($path, $filename, $uploaderobj){
 			{
 				$arraypaperattendance_read_csv = array();
 				$arraypaperattendance_read_csv = paperattendance_read_csv($filecsv, $path, $filename, $uploaderobj);
-				
 				$processed = $arraypaperattendance_read_csv[0];
 				if ($arraypaperattendance_read_csv[1] != null){
 					$pagesWithErrors[$arraypaperattendance_read_csv[1]->pagenumber] = $arraypaperattendance_read_csv[1];

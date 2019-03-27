@@ -47,7 +47,7 @@ $context = context_course::instance($COURSE->id);
 
 //Page settings
 $urlpage = new moodle_url("/local/paperattendance/attendance.php", array('courseid' => $courseid));
-$pagetitle = get_string('printtitle', 'local_paperattendance');
+$pagetitle = get_string('attendancetitle', 'local_paperattendance');
 $PAGE->set_url($urlpage);
 $PAGE->set_context($context);
 $PAGE->set_title($pagetitle);
@@ -92,7 +92,7 @@ if($action == "view"){
 				"token" => $token
 		);
 		// 0 (para domingo) hasta 6 (para sábado)
-		//$fields = array("diaSemana" => 3, "seccionId"=> 59169, "token" => $token);
+		//$fields = array("diaSemana" => 3, "seccionId"=> 60801, "token" => $token);
 		
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -111,10 +111,20 @@ if($action == "view"){
 		$actualseconds = $actualdate["seconds"];
 		$actualmodule = $actualhour.":".$actualminutes.":".$actualseconds;
 		
-		//$actualmodule = "14:25:1";
+		//$actualmodule = "10:00:00";
 		$actualmoduleunix = strtotime($actualmodule);
+		
+		$minutesdelay = $CFG->paperattendance_minutesdelay;
+		if ( ($minutesdelay > 19) || ($minutesdelay < 0) ){ //in case of bad usage of settings, prevent error
+			$minutesdelay = 19;
+		}
+		$secondsdelay = $minutesdelay * 60;
+		
 		$noexistmodule = true;
 		$betweenmodules = true;
+		$module1A = false;
+		$module4A = false;
+		
 		if(count($omegamodules) != 0){ // then exist omegamodules from omega
 			//var_dump("hay modulos omega");
 			foreach ($omegamodules as $module){
@@ -122,8 +132,21 @@ if($action == "view"){
 				$modinicial = $module->horaInicio;
 				$modfinal = $module->horaFin;
 				
+				//*Now we check the borders cases (1A/1B and 4A/4B modules)
+				//the idea is to set the omega module to the actual module if the actual module is in one of this cases
+				
+				//first we check if the initial module is the 1A and if is in the middle of the 1A and 2
+				if ( ($modinicial == "08:15:00") && ( (strtotime("08:15:00") <= $actualmoduleunix) && ($actualmoduleunix <= (strtotime("09:40:00") +$secondsdelay) ) ) ){
+					$module1A = true; //it means that exist 1A module in omega and is in the actual hour
+				}
+				
+				//second we check if the initial module is the 4A and if is in the middle of the 4A and 5
+				if ( ($modinicial == "13:00:00") && ( (strtotime("13:00:00") <= $actualmoduleunix) && ($actualmoduleunix <= (strtotime("14:40:00") +$secondsdelay) ) ) ){
+					$module4A = true; //it means that exist 4A module in omega and is in the actual hour
+				}
+				
 				//Check if exist some module in the actual time
-				if ( (strtotime($modinicial) <= $actualmoduleunix) && ($actualmoduleunix <= strtotime($modfinal) )){
+				if ( ($module1A || $module4A) || ( (strtotime($modinicial) <= $actualmoduleunix) && ($actualmoduleunix <= (strtotime($modfinal) +$secondsdelay) ) ) ){
 					$mod = explode(":", $module->horaInicio);
 					$moduleinicio = $mod[0].":".$mod[1];
 					$modfin = explode(":", $module->horaFin);
@@ -141,7 +164,7 @@ if($action == "view"){
 			//var_dump("no hay modulos omega o no existe actual en omga");
 			$getmodules = "SELECT *
 						   FROM {paperattendance_module} 
-						   ORDER BY name DESC";
+						   ORDER BY name ASC";
 			$modules = $DB->get_records_sql($getmodules);
 			
 			foreach ($modules as $module){
@@ -150,7 +173,7 @@ if($action == "view"){
 				$modfinal = $module->endtime;
 				
 				//Check what module is inside the actual time
-				if ( (strtotime($modinicial) <= $actualmoduleunix) && ($actualmoduleunix <= strtotime($modfinal) )){
+				if ( (strtotime($modinicial) <= $actualmoduleunix) && ($actualmoduleunix <= (strtotime($modfinal) +$secondsdelay) )){
 					$modquery = $module; //set the actual module to the modquery variable that we use after
 					$moduleid = $modquery -> id;
 					$moduleinicio = $modinicial;
@@ -214,8 +237,9 @@ if($action == "view"){
 					$sessinfo .= html_writer::nonempty_tag("div", get_string("module","local_paperattendance").": ".$moduleinicio." - ".$modulefin, array("align" => "left"));
 					$sessinfo .= html_writer::nonempty_tag("div", get_string("session","local_paperattendance")." ".$actualsession, array("align" => "left"));
 					$sessinfo .= html_writer::nonempty_tag("div","<br>", array("align" => "left"));
+					$sessinfo .= html_writer::div(get_string('alertinfodigitalattendance', 'local_paperattendance'),"alert", array("role"=>"alert"));
 					if ($noexistmodule){
-						$sessinfo .= html_writer::div("Se creará una <strong>sesión extra</strong> que no pertenece al horario del curso.","alert alert-info", array("role"=>"alert"));
+						$sessinfo .= html_writer::div(get_string('extrasession', 'local_paperattendance'),"alert alert-info", array("role"=>"alert"));
 					}
 					
 					//Instantiate form
@@ -295,7 +319,7 @@ if($action == "view"){
 			}
 			else {
 				//var_dump("sesion ya existe");
-				$sessinfo = html_writer::div("Ya se ha tomado asistencia en el modulo actual.","alert alert-error", array("role"=>"alert"));
+				$sessinfo = html_writer::div(get_string('attendancealreadytaken', 'local_paperattendance'),"alert alert-error", array("role"=>"alert"));
 				$viewbacktocoursebutton = html_writer::nonempty_tag(
 						"div",
 						$OUTPUT->single_button($backtocourse, get_string('back', 'local_paperattendance')),
@@ -306,7 +330,7 @@ if($action == "view"){
 		// if actual hour is in between modules ->
 		else {
 			//var_dump(" entre modulos");
-			$sessinfo = html_writer::div("Para poder tomar asistencia debe esperar a que comience el módulo siguiente.","alert alert-error", array("role"=>"alert"));
+			$sessinfo = html_writer::div(get_string('waitnextmodule', 'local_paperattendance'),"alert alert-error", array("role"=>"alert"));
 			$viewbacktocoursebutton = html_writer::nonempty_tag(
 					"div",
 					$OUTPUT->single_button($backtocourse, get_string('back', 'local_paperattendance')),
@@ -365,7 +389,7 @@ if($action == "view"){
 }
 
 if($action == "save"){
-	echo html_writer::div("Asistencia guardada correctamente.","alert alert-success", array("role"=>"alert"));
+	echo html_writer::div(get_string('attendancesaved', 'local_paperattendance'),"alert alert-success", array("role"=>"alert"));
 	echo $viewbackbutton;
 }
 
