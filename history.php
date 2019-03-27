@@ -1075,13 +1075,13 @@ $( document ).ready(function() {
 					var settext = "Presente";
 					var settextchangeall = "Cambiar Todos";
 					var setpresencestudent = 1;
-					var icon = moodleurl+"/local/paperattendance/img/invalid.svg";
+					var icon = 'icon fa fa-remove text-danger fa-fw';
 				}
 				else{
 					var settext = "Ausente";
 					var settextchangeall = "Cambiar Todos";
 					var setpresencestudent = 0;
-					var icon = moodleurl+"/local/paperattendance/img/valid.svg";
+					var icon = 'icon fa fa-check text-success fa-fw ';
 				}
 				//now we find every student in the table and change his frontend to present or absent
 				var trow = $('.generaltable').find('tr').find('.presencehover');
@@ -1090,7 +1090,7 @@ $( document ).ready(function() {
 					div.html(settext);
 					div.attr("setstudentpresence", setpresencestudent);
 					div.parent().parent().find('.smallicon').first().attr({
-						  src: icon
+						'class': icon
 					});
 					
 				});
