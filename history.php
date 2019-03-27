@@ -1089,7 +1089,7 @@ $( document ).ready(function() {
 					var div = $(this); 
 					div.html(settext);
 					div.attr("setstudentpresence", setpresencestudent);
-					div.parent().parent().find('.smallicon').first().attr({
+					div.parent().parent().find('.icon').first().attr({
 						'class': icon
 					});
 					
