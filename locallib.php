@@ -1997,7 +1997,7 @@ function paperattendance_runcsvproccessing($path, $filename, $uploaderobj){
 		
 		$lastline = exec($command, $output, $return_var);
 		mtrace($command);
-		mtrace($output);
+		print_r($output);
 		mtrace($return_var);
 		//return_var es el que devuelve 124 si es que se alcanza el timeout
 		if($return_var != 124){
