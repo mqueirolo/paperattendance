@@ -51,6 +51,10 @@ $PAGE->set_pagelayout("standard");
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin ( 'ui' );
 $PAGE->requires->jquery_plugin ( 'ui-css' );
+
+$PAGE->requires->js( new moodle_url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js') );
+$PAGE->requires->css( new moodle_url('https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css') );
+
 $contextsystem = context_system::instance();
 //Page pagination
 $page = optional_param('page', 0, PARAM_INT);
@@ -1004,12 +1008,12 @@ $( document ).ready(function() {
 		if(studentpresence == 0){
 			var settext = "Presente";
 			var setpresence = 1;
-			var icon = moodleurl+"/local/paperattendance/img/invalid.svg";
+			var icon = 'icon fa fa-remove text-danger fa-fw';
 		}
 		else{
 			var settext = "Ausente";
 			var setpresence = 0;
-			var icon = moodleurl+"/local/paperattendance/img/valid.svg";
+			var icon = 'icon fa fa-check text-success fa-fw ';
 		}
 		$.ajax({
 		    type: 'GET',
@@ -1022,8 +1026,8 @@ $( document ).ready(function() {
 		    success: function (response) {
 				div.html(settext);
 				div.attr("setstudentpresence", setpresence);
-				div.parent().parent().find('.smallicon').first().attr({
-					  src: icon
+				div.parent().parent().find('.icon').first().attr({
+					  'class': icon
 				});
 		    }
 		});
