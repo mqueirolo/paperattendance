@@ -1070,7 +1070,7 @@ $( document ).ready(function() {
 			    //now that we save the students attendance, we need to actualize the setpresence: 0 ->when was changed to present and 1->when changed to absent
 		    	setpresence = response["setpresence"];
 		    	var moodleurl = "<?php echo $CFG->wwwroot;?>";
-				
+				//we use font awesome icons
 				if(setpresence == 1){
 					var settext = "Presente";
 					var settextchangeall = "Cambiar Todos";
