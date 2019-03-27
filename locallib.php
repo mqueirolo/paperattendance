@@ -1999,8 +1999,8 @@ function paperattendance_runcsvproccessing($path, $filename, $uploaderobj){
 		mtrace($command);
 		print_r($output);
 		mtrace($return_var);
-		//return_var es el que devuelve 124 si es que se alcanza el timeout
-		if($return_var != 124){
+		//return_var devuelve 0 si el proceso funciona correctamente
+		if($return_var == 0){
 			mtrace("no se alcanzó el timeout, todo bien");
 			
 			//revisar el csv que creó formscanner
