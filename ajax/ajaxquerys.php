@@ -193,7 +193,6 @@ switch ($action) {
 		}
 		$parametros = array_merge($parametros1, $filter);
 		$courses = $DB->get_records_sql($sqlcourses, $parametros);
-		var_dump($like);
 		echo json_encode($courses);
 		break;
 	//This case returns the course data to add it to the cart list
