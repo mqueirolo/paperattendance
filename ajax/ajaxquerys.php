@@ -103,10 +103,11 @@ switch ($action) {
 		if (! has_capability('local/paperattendance:printsearch', $context) && ! has_capability('local/paperattendance:printsearch', $contextsystem)) {
 			print_error(get_string('notallowedprint', 'local_paperattendance'));
 		}
-		//parameters for the query:
-		//sqlin  -> enrol methods
-		//param2 -> contextlevel, role shortname
-		//filter -> input from user (course fullname or teacher name)
+		/*parameters for the query:
+	 	 *sqlin  -> enrol methods
+		 *param2 -> contextlevel, role shortname
+		 *filter -> input from user (course fullname or teacher name)
+		 */
 		$filter = array("%".$data."%", $data."%");
 		$enrolincludes = explode("," ,$CFG->paperattendance_enrolmethod);
 		list ( $sqlin, $param1 ) = $DB->get_in_or_equal ( $enrolincludes );
@@ -137,14 +138,6 @@ switch ($action) {
 						ORDER BY c.fullname";
 */			
 			//Query without date filter
-			/*$filter = array("%".$data."%", $data."%");
-			$enrolincludes = explode("," ,$CFG->paperattendance_enrolmethod);
-			list ( $sqlin, $param1 ) = $DB->get_in_or_equal ( $enrolincludes );
-			$param2 = array(
-					50,
-					'%profesoreditor%',
-			);
-			$parametros1= array_merge($param1,$param2);*/
 			$sqlcourses = "SELECT c.id,
 						c.fullname,
 						cat.name,
@@ -177,14 +170,6 @@ switch ($action) {
 				}
 			$counter++;
 			}
-			/*$filter = array("%".$data."%", $data."%");
-			$enrolincludes = explode("," ,$CFG->paperattendance_enrolmethod);
-			list ( $sqlin, $param1 ) = $DB->get_in_or_equal ( $enrolincludes );
-			$param2 = array(
-					50,
-					'%profesoreditor%',
-			);
-			$parametros1= array_merge($param1,$param2);*/
 			$sqlcourses = "SELECT c.id,
 						c.fullname,
 						cat.name,
