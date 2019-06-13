@@ -143,7 +143,7 @@ switch ($action) {
 						cat.name,
 						u.id as teacherid,
 						CONCAT( u.firstname, ' ', u.lastname) as teacher
-						FROM mdl_user u
+						FROM {user} u
 						INNER JOIN {user_enrolments} ue ON (ue.userid = u.id)
 						INNER JOIN {enrol} e ON (e.id = ue.enrolid)
 						INNER JOIN {role_assignments} ra ON (ra.userid = u.id)
@@ -175,7 +175,7 @@ switch ($action) {
 						cat.name,
 						u.id as teacherid,
 						CONCAT( u.firstname, ' ', u.lastname) as teacher
-						FROM mdl_user u
+						FROM {user} u
 						INNER JOIN {user_enrolments} ue ON (ue.userid = u.id)
 						INNER JOIN {enrol} e ON (e.id = ue.enrolid)
 						INNER JOIN {role_assignments} ra ON (ra.userid = u.id)
