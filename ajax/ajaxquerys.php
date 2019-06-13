@@ -103,6 +103,19 @@ switch ($action) {
 		if (! has_capability('local/paperattendance:printsearch', $context) && ! has_capability('local/paperattendance:printsearch', $contextsystem)) {
 			print_error(get_string('notallowedprint', 'local_paperattendance'));
 		}
+		/*parameters for the query:
+	 	 *sqlin  -> enrol methods
+		 *param2 -> contextlevel, role shortname
+		 *filter -> input from user (course fullname or teacher name)
+		 */
+		$filter = array("%".$data."%", $data."%");
+		$enrolincludes = explode("," ,$CFG->paperattendance_enrolmethod);
+		list ( $sqlin, $param1 ) = $DB->get_in_or_equal ( $enrolincludes );
+		$param2 = array(
+				50,
+				'%profesoreditor%',
+		);
+		$parametros1= array_merge($param1,$param2);
 		//If is site admin he can see courses from all categories
 		if(is_siteadmin()){
 /*			#Query with date filter
@@ -125,22 +138,22 @@ switch ($action) {
 						ORDER BY c.fullname";
 */			
 			//Query without date filter
-			$filter = array("%".$data."%", $data."%");
-			list($sqlin, $parametros1) = $DB->get_in_or_equal(array(3,4));
 			$sqlcourses = "SELECT c.id,
 						c.fullname,
 						cat.name,
 						u.id as teacherid,
 						CONCAT( u.firstname, ' ', u.lastname) as teacher
-						FROM {role} AS r
-						INNER JOIN {role_assignments} ra ON (ra.roleid = r.id AND r.id $sqlin)
+						FROM {user} u
+						INNER JOIN {user_enrolments} ue ON (ue.userid = u.id)
+						INNER JOIN {enrol} e ON (e.id = ue.enrolid)
+						INNER JOIN {role_assignments} ra ON (ra.userid = u.id)
 						INNER JOIN {context} ct ON (ct.id = ra.contextid)
-						INNER JOIN {course} c ON (c.id = ct.instanceid)
-						INNER JOIN {user} u ON (u.id = ra.userid)
+						INNER JOIN {course} c ON (c.id = ct.instanceid AND e.courseid = c.id)
+						INNER JOIN {role} r ON (r.id = ra.roleid)
 						INNER JOIN {course_categories} as cat ON (cat.id = c.category)
-						WHERE ( c.idnumber > 0 ) AND (CONCAT( u.firstname, ' ', u.lastname) like ? OR c.fullname like ?)
+						WHERE e.enrol $sqlin AND c.idnumber > 0 AND ct.contextlevel = ? AND r.shortname like ? AND (CONCAT( u.firstname, ' ', u.lastname) like ? OR c.fullname like ?)
 						GROUP BY c.id
-						ORDER BY c.fullname";
+						ORDER BY r.id ASC";
 		}else{ 
 			//If user is a secretary, he can see only courses from his categorie
 			$paths = unserialize(base64_decode($paths));
@@ -157,26 +170,25 @@ switch ($action) {
 				}
 			$counter++;
 			}
-			list($sqlin, $parametros1) = $DB->get_in_or_equal(array(3,4));
-			$filter = array("%".$data."%", $data."%");
 			$sqlcourses = "SELECT c.id,
 						c.fullname,
 						cat.name,
 						u.id as teacherid,
 						CONCAT( u.firstname, ' ', u.lastname) as teacher
-						FROM {user} AS u
+						FROM {user} u
+						INNER JOIN {user_enrolments} ue ON (ue.userid = u.id)
+						INNER JOIN {enrol} e ON (e.id = ue.enrolid)
 						INNER JOIN {role_assignments} ra ON (ra.userid = u.id)
 						INNER JOIN {context} ct ON (ct.id = ra.contextid)
-						INNER JOIN {course} c ON (c.id = ct.instanceid)
-						INNER JOIN {role} r ON (r.id = ra.roleid AND r.id $sqlin)
+						INNER JOIN {course} c ON (c.id = ct.instanceid AND e.courseid = c.id)
+						INNER JOIN {role} r ON (r.id = ra.roleid)
 						INNER JOIN {course_categories} as cat ON (cat.id = c.category)
-						WHERE ($like AND c.idnumber > 0 ) AND (CONCAT( u.firstname, ' ', u.lastname) like ? OR c.fullname like ?)
+						WHERE ($like AND c.idnumber > 0 ) AND e.enrol $sqlin AND ct.contextlevel = ? AND r.shortname like ? AND (CONCAT( u.firstname, ' ', u.lastname) like ? OR c.fullname like ?)
 						GROUP BY c.id
-						ORDER BY c.fullname";
+						ORDER BY r.id ASC";
 		}
 		$parametros = array_merge($parametros1, $filter);
 		$courses = $DB->get_records_sql($sqlcourses, $parametros);
-	
 		echo json_encode($courses);
 		break;
 	//This case returns the course data to add it to the cart list
