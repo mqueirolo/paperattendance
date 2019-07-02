@@ -122,14 +122,21 @@ $capabilities = array(
 						'editingteacher' => CAP_PROHIBIT,
 						'manager' => CAP_ALLOW
 				)),
-    'local/paperattendance:takeattendance' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
-            'student' => CAP_PROHIBIT,
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ))
+        'local/paperattendance:takeattendance' => array(
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_COURSE,
+            'archetypes' => array(
+                'student' => CAP_PROHIBIT,
+                'teacher' => CAP_ALLOW,
+                'editingteacher' => CAP_ALLOW,
+                'manager' => CAP_ALLOW
+            )),
+        'local/paperattendance:adminacademic' => array(
+            'riskbitmask' => RISK_MANAGETRUST,
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_SYSTEM,
+            'archetypes' => array(
+                'manager' => CAP_ALLOW
+            ))
 		
 );
