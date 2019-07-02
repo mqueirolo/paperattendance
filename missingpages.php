@@ -45,7 +45,9 @@ $sesskey = optional_param("sesskey", null, PARAM_ALPHANUM);
 //Page
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = 20;
-if(is_siteadmin()){
+
+$contextsystem = context_system::instance();
+if(is_siteadmin()  || has_capability('local/paperattendance:adminacademic', $contextsystem)){
 	//if the user is an admin show everything
 	$sqlmissing = "SELECT *
 					FROM {paperattendance_sessionpages}
