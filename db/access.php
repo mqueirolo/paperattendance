@@ -41,102 +41,101 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-		'local/paperattendance:printsecre' => array(
-				'captype' => 'read',
-				'contextlevel' => CONTEXT_COURSECAT,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_ALLOW,
-						'editingteacher' => CAP_ALLOW,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:print' => array(
-				'captype' => 'read',
-				'contextlevel' => CONTEXT_COURSE,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_ALLOW,
-						'editingteacher' => CAP_ALLOW,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:upload' => array(
-				'captype' => 'write',
-				'contextlevel' => CONTEXT_COURSECAT,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_PROHIBIT,
-						'editingteacher' => CAP_PROHIBIT,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:history' => array(
-				'captype' => 'read',
-				'contextlevel' => CONTEXT_COURSE,
-				'archetypes' => array(
-						'student' => CAP_ALLOW,
-						'teacher' => CAP_ALLOW,
-						'editingteacher' => CAP_ALLOW,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:manageattendance' => array(
-				'riskbitmask' => RISK_MANAGETRUST,
-				'captype' => 'write',
-				'contextlevel' => CONTEXT_SYSTEM,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_ALLOW,
-						'editingteacher' => CAP_ALLOW,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:modules' => array(
-				'riskbitmask' => RISK_MANAGETRUST,
-				'captype' => 'write',
-				'contextlevel' => CONTEXT_SYSTEM,
-				'archetypes' => array(
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:teacherview' => array(
-				'captype' => 'read',
-				'contextlevel' => CONTEXT_SYSTEM,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_ALLOW,
-						'editingteacher' => CAP_ALLOW,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:printsearch' => array(
-				'captype' => 'read',
-				'contextlevel' => CONTEXT_COURSECAT,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_PROHIBIT,
-						'editingteacher' => CAP_PROHIBIT,
-						'manager' => CAP_ALLOW
-				)),
-		'local/paperattendance:missingpages' => array(
-				'captype' => 'write',
-				'riskbitmask' => RISK_MANAGETRUST,
-				'contextlevel' => CONTEXT_COURSECAT,
-				'archetypes' => array(
-						'student' => CAP_PROHIBIT,
-						'teacher' => CAP_PROHIBIT,
-						'editingteacher' => CAP_PROHIBIT,
-						'manager' => CAP_ALLOW
-				)),
-        'local/paperattendance:takeattendance' => array(
-                'captype' => 'write',
-                'contextlevel' => CONTEXT_COURSE,
-                'archetypes' => array(
+    'local/paperattendance:printsecre' => array(
+            'captype' => 'read',
+            'contextlevel' => CONTEXT_COURSECAT,
+            'archetypes' => array(
                     'student' => CAP_PROHIBIT,
                     'teacher' => CAP_ALLOW,
                     'editingteacher' => CAP_ALLOW,
                     'manager' => CAP_ALLOW
-                )),
-        'local/paperattendance:adminacademic' => array(
-                'riskbitmask' => RISK_MANAGETRUST,
-                'captype' => 'write',
-                'contextlevel' => CONTEXT_SYSTEM,
-                'archetypes' => array(
+            )),
+    'local/paperattendance:print' => array(
+            'captype' => 'read',
+            'contextlevel' => CONTEXT_COURSE,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_ALLOW,
+                    'editingteacher' => CAP_ALLOW,
                     'manager' => CAP_ALLOW
-                ))
-		
+            )),
+    'local/paperattendance:upload' => array(
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_COURSECAT,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_PROHIBIT,
+                    'editingteacher' => CAP_PROHIBIT,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:history' => array(
+            'captype' => 'read',
+            'contextlevel' => CONTEXT_COURSE,
+            'archetypes' => array(
+                    'student' => CAP_ALLOW,
+                    'teacher' => CAP_ALLOW,
+                    'editingteacher' => CAP_ALLOW,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:manageattendance' => array(
+            'riskbitmask' => RISK_MANAGETRUST,
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_SYSTEM,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_ALLOW,
+                    'editingteacher' => CAP_ALLOW,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:modules' => array(
+            'riskbitmask' => RISK_MANAGETRUST,
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_SYSTEM,
+            'archetypes' => array(
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:teacherview' => array(
+            'captype' => 'read',
+            'contextlevel' => CONTEXT_SYSTEM,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_ALLOW,
+                    'editingteacher' => CAP_ALLOW,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:printsearch' => array(
+            'captype' => 'read',
+            'contextlevel' => CONTEXT_COURSECAT,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_PROHIBIT,
+                    'editingteacher' => CAP_PROHIBIT,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:missingpages' => array(
+            'captype' => 'write',
+            'riskbitmask' => RISK_MANAGETRUST,
+            'contextlevel' => CONTEXT_COURSECAT,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_PROHIBIT,
+                    'editingteacher' => CAP_PROHIBIT,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:takeattendance' => array(
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_COURSE,
+            'archetypes' => array(
+                    'student' => CAP_PROHIBIT,
+                    'teacher' => CAP_ALLOW,
+                    'editingteacher' => CAP_ALLOW,
+                    'manager' => CAP_ALLOW
+            )),
+    'local/paperattendance:adminacademic' => array(
+            'riskbitmask' => RISK_MANAGETRUST,
+            'captype' => 'write',
+            'contextlevel' => CONTEXT_SYSTEM,
+            'archetypes' => array(
+                    'manager' => CAP_ALLOW
+            ))
 );
