@@ -42,7 +42,8 @@ $action = optional_param('action', 'viewform', PARAM_TEXT);
 $page = optional_param('page', 0, PARAM_INT);
 $perpage = 30;
 
-if(is_siteadmin()){
+$contextsystem = context_system::instance();
+if(is_siteadmin() || has_capability('local/paperattendance:adminacademic', $contextsystem)){
 /*	$sqlcourses = "SELECT c.id,
 				c.fullname,
 				cat.name,
