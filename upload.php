@@ -45,30 +45,34 @@ if (isguestuser()) {
 $courseid = optional_param('courseid',1, PARAM_INT);
 $categoryid = optional_param('categoryid', $CFG->paperattendance_categoryid, PARAM_INT);
 $action = optional_param('action', 'viewform', PARAM_TEXT);
-	if(is_siteadmin()){
-		$context = context_system::instance();
-	}
-	else{
-		$sqlcategory = "SELECT cc.*
-					FROM {course_categories} cc
-					INNER JOIN {role_assignments} ra ON (ra.userid = ?)
-					INNER JOIN {role} r ON (r.id = ra.roleid AND r.shortname = ?)
-					INNER JOIN {context} co ON (co.id = ra.contextid  AND  co.instanceid = cc.id  )";
-		
-		$categoryparams = array($USER->id, "secrepaper");
-		
-		$categorys = $DB->get_records_sql($sqlcategory, $categoryparams);
-		$categoryscount = count($categorys);
-		if($categorys){
-			foreach($categorys as $category){
-				$categoryids[] = $category->id;
-			}
-			$categoryid = $categoryids[0];
-		}else{
-			print_error(get_string('notallowedupload', 'local_paperattendance'));
-		}
-		$context = context_coursecat::instance($categoryid);
-	}
+
+
+$contextsystem = context_system::instance();
+
+if(is_siteadmin() || has_capability('local/paperattendance:adminacademic', $contextsystem)){
+    $context = context_system::instance();
+}
+else{
+    $sqlcategory = "SELECT cc.*
+                FROM {course_categories} cc
+                INNER JOIN {role_assignments} ra ON (ra.userid = ?)
+                INNER JOIN {role} r ON (r.id = ra.roleid AND r.shortname = ?)
+                INNER JOIN {context} co ON (co.id = ra.contextid  AND  co.instanceid = cc.id  )";
+
+    $categoryparams = array($USER->id, "secrepaper");
+
+    $categorys = $DB->get_records_sql($sqlcategory, $categoryparams);
+    $categoryscount = count($categorys);
+    if($categorys){
+        foreach($categorys as $category){
+            $categoryids[] = $category->id;
+        }
+        $categoryid = $categoryids[0];
+    }else{
+        print_error(get_string('notallowedupload', 'local_paperattendance'));
+    }
+    $context = context_coursecat::instance($categoryid);
+}
 
 $contextsystem = context_system::instance();
 
